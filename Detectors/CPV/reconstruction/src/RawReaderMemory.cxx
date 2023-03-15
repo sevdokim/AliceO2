@@ -110,7 +110,7 @@ RawErrorType_t RawReaderMemory::nextPage()
     } else if (mCurrentHBFOrbit != RDHUtils::getHeartBeatOrbit(rawHeader)) {
       // next HBF started but we didn't find stop bit.
       mStopBitWasNotFound = true;
-      mCurrentPosition += RDHUtils::getOffsetToNext(rawHeader); // moving on
+      mCurrentPosition += RDHUtils::getOffsetToNext(rawHeader);   // moving on
       return RawErrorType_t::kSTOPBIT_NOTFOUND;                   // Stop bit was not found -> skip to next HBF
     }
   } catch (...) {

@@ -71,7 +71,7 @@ class CpvHeader
   CpvHeader() = default;
   CpvHeader(std::vector<char>::const_iterator b, std::vector<char>::const_iterator e)
   {                                               //reading header from file
-    for (int i = 0; i < 10 && b != e; i++, b++) { //read up to 10 mBytes
+    for (int i = 0; i < 10 && b != e; i++, b++) { // read up to 10 mBytes
       mBytes[i] = *b;
     }
   }
@@ -101,7 +101,7 @@ class CpvHeader
   uint32_t orbit() const { return mBytes[4] + (mBytes[5] << 8) + (mBytes[6] << 16) + (mBytes[7] << 24); }
 
  public:
-  unsigned char mBytes[10] = {0}; //0 - 79 bits (10 bytes)
+  unsigned char mBytes[10] = {0}; // 0 - 79 bits (10 bytes)
 };
 
 class CpvTrailer
@@ -110,7 +110,7 @@ class CpvTrailer
   CpvTrailer() = default;
   CpvTrailer(std::vector<char>::const_iterator b, std::vector<char>::const_iterator e)
   {                                               //reading
-    for (int i = 0; i < 10 && b != e; i++, b++) { //read up to 10 mBytes
+    for (int i = 0; i < 10 && b != e; i++, b++) { // read up to 10 mBytes
       mBytes[i] = *b;
     }
   }
