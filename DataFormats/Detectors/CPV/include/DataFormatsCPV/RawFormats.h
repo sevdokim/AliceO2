@@ -42,15 +42,14 @@ class CpvWord
   { //Reading
     //resposibility of coller to esure that
     //array will not end while reading
-    for (int i = 0; i < 16 && b != e; i++, b++) {
+    for (int i = 0; i < 10 && b != e; i++, b++) {
       mBytes[i] = *b;
     }
   }
   ~CpvWord() = default;
   bool isOK() const
   {
-    return (mBytes[9] < static_cast<unsigned char>(24)) &&
-           (mBytes[15] == 0) && (mBytes[14] == 0) && (mBytes[13] == 0) && (mBytes[12] == 0) && (mBytes[11] == 0) && (mBytes[10] == 0);
+    return (mBytes[9] < static_cast<unsigned char>(24));
   }
   short ccId() const { return short(mBytes[9]); }
   uint32_t cpvPadWord(int i) const
@@ -63,7 +62,7 @@ class CpvWord
   }
 
  public:
-  unsigned char mBytes[16] = {0};
+  unsigned char mBytes[10] = {0};
 };
 
 class CpvHeader
@@ -72,7 +71,7 @@ class CpvHeader
   CpvHeader() = default;
   CpvHeader(std::vector<char>::const_iterator b, std::vector<char>::const_iterator e)
   {                                               //reading header from file
-    for (int i = 0; i < 16 && b != e; i++, b++) { //read up to 16 mBytes
+    for (int i = 0; i < 10 && b != e; i++, b++) { //read up to 10 mBytes
       mBytes[i] = *b;
     }
   }
@@ -93,19 +92,16 @@ class CpvHeader
     mBytes[7] = (orbitBC.orbit & 0xff000000) >> 24;                            //bits 63 - 32 orbit
     mBytes[8] = 0x00;                                                          //bits 64-71 reserved
     mBytes[9] = 0xe0;                                                          //word ID of cpv header (bits 79 - 72)
-    for (int i = 10; i < 16; i++) {
-      mBytes[i] = 0; //bits 127-80 must be zeros
-    }
   }
   ~CpvHeader() = default;
-  bool isOK() const { return (mBytes[9] == 0xe0) && (mBytes[10] == 0) && (mBytes[11] == 0) && (mBytes[12] == 0) && (mBytes[13] == 0) && (mBytes[14] == 0) && (mBytes[15] == 0); }
+  bool isOK() const { return (mBytes[9] == 0xe0); }
   bool isNoDataExpected() const { return mBytes[1] & 0b00100000; }
   bool isDataContinued() const { return mBytes[1] & 0b0100000; }
   uint16_t bc() const { return static_cast<uint16_t>(mBytes[2]) + static_cast<uint16_t>((mBytes[3] & 0x0f) << 8); }
   uint32_t orbit() const { return mBytes[4] + (mBytes[5] << 8) + (mBytes[6] << 16) + (mBytes[7] << 24); }
 
  public:
-  unsigned char mBytes[16] = {0}; //0 - 127 bits (16 bytes)
+  unsigned char mBytes[10] = {0}; //0 - 79 bits (10 bytes)
 };
 
 class CpvTrailer
@@ -114,7 +110,7 @@ class CpvTrailer
   CpvTrailer() = default;
   CpvTrailer(std::vector<char>::const_iterator b, std::vector<char>::const_iterator e)
   {                                               //reading
-    for (int i = 0; i < 16 && b != e; i++, b++) { //read up to 16 mBytes
+    for (int i = 0; i < 10 && b != e; i++, b++) { //read up to 10 mBytes
       mBytes[i] = *b;
     }
   }
@@ -129,18 +125,15 @@ class CpvTrailer
     }
     mBytes[8] = isAllDataSent * 0b10000000; //bit 71 all data is sent for current trigger
     mBytes[9] = char(0xf0);                 //word ID of cpv trailer
-    for (int i = 10; i < 16; i++) {
-      mBytes[i] = 0;
-    }
   }
   ~CpvTrailer() = default;
-  bool isOK() const { return (mBytes[9] == 0xf0) && (mBytes[10] == 0) && (mBytes[11] == 0) && (mBytes[12] == 0) && (mBytes[13] == 0) && (mBytes[14] == 0) && (mBytes[15] == 0); }
+  bool isOK() const { return (mBytes[9] == 0xf0); }
   uint16_t wordCounter() const { return (mBytes[1] >> 4) + ((mBytes[2] & 0b00011111) << 4); }
   bool isAllDataSent() const { return (mBytes[8] & 0b10000000); }
   uint16_t bc() const { return mBytes[0] + ((mBytes[1] & 0x0f) << 8); }
 
  public:
-  unsigned char mBytes[16] = {0};
+  unsigned char mBytes[10] = {0};
 };
 
 } // namespace cpv
