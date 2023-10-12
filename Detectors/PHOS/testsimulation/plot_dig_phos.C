@@ -24,11 +24,11 @@ void plot_dig_phos(int ievent = 0, TString inputfile = "o2dig.root")
   TTree* digTree = (TTree*)gFile->Get("o2sim");
   std::vector<o2::phos::Digit>* mDigitsArray = nullptr;
   o2::dataformats::MCTruthContainer<o2::phos::MCLabel>* labels = nullptr;
-  digTree->SetBranchAddress("PHSDigit", &mDigitsArray);
-  digTree->SetBranchAddress("PHSDigitMCTruth", &labels);
+  digTree->SetBranchAddress("PHOSDigit", &mDigitsArray);
+  digTree->SetBranchAddress("PHOSDigitMCTruth", &labels);
 
   if (!mDigitsArray) {
-    cout << "PHOS digits not in tree. Exiting ..." << endl;
+    cout << "PHOS digits not in tree. Exiting..." << endl;
     return;
   }
   digTree->GetEvent(ievent);

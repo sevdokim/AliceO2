@@ -72,9 +72,11 @@ void ClusterizerSpec::run(framework::ProcessingContext& ctx)
   if (mUseDigits) {
     LOG(debug) << "PHOSClusterizer - run on digits called";
 
-    auto dataref = ctx.inputs().get("digits");
-    auto const* phosheader = o2::framework::DataRefUtils::getHeader<o2::phos::PHOSBlockHeader*>(dataref);
-    if (!phosheader->mHasPayload) {
+    // auto dataref = ctx.inputs().get("digits");
+    // auto const* phosheader = o2::framework::DataRefUtils::getHeader<o2::phos::PHOSBlockHeader*>(dataref);
+    // if (!phosheader->mHasPayload) {
+    auto digits = ctx.inputs().get<std::vector<o2::phos::Digit>>("digits");
+    if (!digits.size()) { // nothing to process
       mOutputClusters.clear();
       ctx.outputs().snapshot(o2::framework::Output{"PHS", "CLUSTERS", 0, o2::framework::Lifetime::Timeframe}, mOutputClusters);
       if (mFullCluOutput) {
@@ -90,7 +92,6 @@ void ClusterizerSpec::run(framework::ProcessingContext& ctx)
       return;
     }
     // auto digits = ctx.inputs().get<gsl::span<o2::phos::Digit>>("digits");
-    auto digits = ctx.inputs().get<std::vector<o2::phos::Digit>>("digits");
     auto digitsTR = ctx.inputs().get<std::vector<o2::phos::TriggerRecord>>("digitTriggerRecords");
     LOG(debug) << "[PHOSClusterizer - run]  Received " << digitsTR.size() << " TR, running clusterizer ...";
     // const o2::dataformats::MCTruthContainer<MCLabel>* truthcont=nullptr;
