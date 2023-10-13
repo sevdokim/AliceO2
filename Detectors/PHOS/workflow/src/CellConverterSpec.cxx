@@ -37,10 +37,10 @@ void CellConverterSpec::init(framework::InitContext& ctx)
 
 void CellConverterSpec::run(framework::ProcessingContext& ctx)
 {
-  //LOG(debug) << "[PHOSCellConverter - run] called";
-  //auto dataref = ctx.inputs().get("digits");
-  //auto const* phosheader = o2::framework::DataRefUtils::getHeader<o2::phos::PHOSBlockHeader*>(dataref);
-  //if (!phosheader->mHasPayload) {
+  // LOG(debug) << "[PHOSCellConverter - run] called";
+  // auto dataref = ctx.inputs().get("digits");
+  // auto const* phosheader = o2::framework::DataRefUtils::getHeader<o2::phos::PHOSBlockHeader*>(dataref);
+  // if (!phosheader->mHasPayload) {
   auto digits = ctx.inputs().get<std::vector<o2::phos::Digit>>("digits");
   if (!digits.size()) { // nothing to process
     mOutputCells.clear();
